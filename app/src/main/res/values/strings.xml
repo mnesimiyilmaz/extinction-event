@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Extinction Event</string>
+    <string name="description">A meteor closes in while your phone is locked. Unlock it, and it strikes.</string>
+    <string name="author">mnesimiyilmaz</string>
+    <string name="source_code">Source code</string>
+    <string name="repository_url" translatable="false">https://github.com/mnesimiyilmaz/extinction-event</string>
+</resources>

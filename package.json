@@ -1,0 +1,10 @@
+{
+  "name": "extinction-event-tools",
+  "private": true,
+  "type": "module",
+  "description": "Asset tooling for the Extinction Event live wallpaper (Earth texture crop).",
+  "scripts": {
+    "test": "node --test tools/*.test.js",
+    "earth-crop": "node tools/earth-crop.mjs"
+  }
+}
