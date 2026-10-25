@@ -1,0 +1,17 @@
+# Gradle / Android
+.gradle/
+.kotlin/
+build/
+local.properties
+*.apk
+*.aab
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+
+# Local tooling
+node_modules/
+.cache/
+spikes/

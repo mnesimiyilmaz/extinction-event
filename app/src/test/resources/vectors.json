@@ -1,0 +1,136 @@
+{
+  "params": { "pHold": 0.85, "tau": 3.0, "diveBase": 0.5, "diveExtra": 0.4, "impactDuration": 2.5, "dragBoost": 4.0 },
+  "cases": [
+    {
+      "name": "locked screen-on, then unlock",
+      "events": [
+        { "t": 0, "type": "SCREEN_ON", "locked": true },
+        { "t": 6, "type": "UNLOCK" }
+      ],
+      "samples": [
+        { "t": 3, "state": "APPROACH", "p": 0.5373025, "meteorT": 3, "impactT": -1 },
+        { "t": 6, "state": "DIVE", "p": 0.7349650 },
+        { "t": 6.25, "state": "DIVE", "p": 0.7889105 },
+        { "t": 7, "state": "IMPACT", "p": 1, "impactT": 0.4458659 },
+        { "t": 10, "state": "AFTERMATH", "p": 1, "impactT": 3.4458659 }
+      ]
+    },
+    {
+      "name": "long lock-screen dwell never impacts",
+      "events": [{ "t": 0, "type": "SCREEN_ON", "locked": true }],
+      "samples": [{ "t": 600, "state": "APPROACH", "p": 0.85, "impactT": -1 }]
+    },
+    {
+      "name": "screen on while already unlocked dives from p=0",
+      "events": [{ "t": 0, "type": "SCREEN_ON", "locked": false }],
+      "samples": [
+        { "t": 0.45, "state": "DIVE", "p": 0.25 },
+        { "t": 1, "state": "IMPACT", "impactT": 0.1 },
+        { "t": 10, "state": "AFTERMATH", "impactT": 9.1 }
+      ]
+    },
+    {
+      "name": "unlock broadcast before screen-on",
+      "events": [
+        { "t": 0, "type": "UNLOCK" },
+        { "t": 0.05, "type": "SCREEN_ON", "locked": false }
+      ],
+      "samples": [
+        { "t": 0.45, "state": "DIVE", "p": 0.25 },
+        { "t": 1, "state": "IMPACT", "impactT": 0.1 }
+      ]
+    },
+    {
+      "name": "screen off mid-dive resets",
+      "events": [
+        { "t": 0, "type": "SCREEN_ON", "locked": true },
+        { "t": 1, "type": "UNLOCK" },
+        { "t": 1.2, "type": "SCREEN_OFF" },
+        { "t": 2, "type": "SCREEN_ON", "locked": true }
+      ],
+      "samples": [
+        { "t": 1.1, "state": "DIVE", "p": 0.2532157 },
+        { "t": 1.5, "state": "OFF", "p": 0, "meteorT": -1, "impactT": -1 },
+        { "t": 2, "state": "APPROACH", "p": 0, "meteorT": 0 },
+        { "t": 5, "state": "APPROACH", "p": 0.5373025 }
+      ]
+    },
+    {
+      "name": "screen off mid-impact resets",
+      "events": [
+        { "t": 0, "type": "SCREEN_ON", "locked": false },
+        { "t": 1.5, "type": "SCREEN_OFF" },
+        { "t": 3, "type": "SCREEN_ON", "locked": true }
+      ],
+      "samples": [
+        { "t": 1.4, "state": "IMPACT", "impactT": 0.5 },
+        { "t": 1.6, "state": "OFF", "impactT": -1 },
+        { "t": 3, "state": "APPROACH", "p": 0 }
+      ]
+    },
+    {
+      "name": "duplicate events are ignored",
+      "events": [
+        { "t": 0, "type": "SCREEN_ON", "locked": true },
+        { "t": 1, "type": "SCREEN_ON", "locked": true },
+        { "t": 3, "type": "UNLOCK" },
+        { "t": 3.2, "type": "UNLOCK" }
+      ],
+      "samples": [
+        { "t": 2, "state": "APPROACH", "p": 0.4135955 },
+        { "t": 3.3, "state": "DIVE", "p": 0.6367349 }
+      ]
+    },
+    {
+      "name": "unlock during aftermath does not replay the impact",
+      "events": [
+        { "t": 0, "type": "SCREEN_ON", "locked": false },
+        { "t": 5, "type": "UNLOCK" }
+      ],
+      "samples": [{ "t": 6, "state": "AFTERMATH", "p": 1, "impactT": 5.1 }]
+    },
+    {
+      "name": "dragging speeds up the approach",
+      "events": [
+        { "t": 0, "type": "SCREEN_ON", "locked": true },
+        { "t": 1, "type": "DRAG_START" },
+        { "t": 2, "type": "DRAG_END" }
+      ],
+      "samples": [
+        { "t": 1.5, "state": "APPROACH", "p": 0.5373025, "meteorT": 1.5 },
+        { "t": 3, "state": "APPROACH", "p": 0.7349650, "meteorT": 3 }
+      ]
+    },
+    {
+      "name": "dragging never causes an impact",
+      "events": [
+        { "t": 0, "type": "SCREEN_ON", "locked": true },
+        { "t": 0.5, "type": "DRAG_START" }
+      ],
+      "samples": [{ "t": 300, "state": "APPROACH", "p": 0.85, "impactT": -1 }]
+    },
+    {
+      "name": "drag outside the approach is ignored",
+      "events": [
+        { "t": 0, "type": "DRAG_START" },
+        { "t": 1, "type": "SCREEN_ON", "locked": true },
+        { "t": 4, "type": "UNLOCK" },
+        { "t": 4.1, "type": "DRAG_START" }
+      ],
+      "samples": [
+        { "t": 4, "state": "DIVE", "p": 0.5373025 },
+        { "t": 4.3, "state": "DIVE", "p": 0.6367349 }
+      ]
+    },
+    {
+      "name": "screen off clears the drag",
+      "events": [
+        { "t": 0, "type": "SCREEN_ON", "locked": true },
+        { "t": 1, "type": "DRAG_START" },
+        { "t": 2, "type": "SCREEN_OFF" },
+        { "t": 3, "type": "SCREEN_ON", "locked": true }
+      ],
+      "samples": [{ "t": 6, "state": "APPROACH", "p": 0.5373025 }]
+    }
+  ]
+}
